@@ -5,7 +5,7 @@ import Utils.DataReader
 object Day1_Sonar_Sweep {
 
     fun part1() {
-        val numbers = DataReader.readFileOfIntegers("src/main/resources/day1_sonar_sweep.txt")
+        val numbers = DataReader.readFileOfIntegers("src/main/resources/day1_sonar_sweep_fabius.txt")
 
         var lastNumber = Int.MAX_VALUE
         var countOfIncreases = 0
@@ -21,7 +21,7 @@ object Day1_Sonar_Sweep {
     }
 
     fun part2() {
-        val numbers = DataReader.readFileOfIntegers("src/main/resources/day1_sonar_sweep.txt")
+        val numbers = DataReader.readFileOfIntegers("src/main/resources/day1_sonar_sweep_fabius.txt")
 
         var lastNumber = Int.MAX_VALUE
         var secondLastNumber = Int.MAX_VALUE

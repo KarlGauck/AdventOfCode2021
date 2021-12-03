@@ -8,4 +8,8 @@ object DataReader {
         return File(fileName).useLines { (it.map { it.toIntOrNull() }).toMutableList() }
     }
 
+    fun readFileOfStrings(fileName: String): MutableList<String> {
+        return File(fileName).useLines { it.toMutableList() }
+    }
+
 }
