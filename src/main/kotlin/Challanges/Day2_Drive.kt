@@ -5,7 +5,7 @@ import Utils.DataReader
 object Day2_Drive {
 
     fun part1() {
-        val instructions = DataReader.readFileOfStrings("src/main/resources/day1_drive.txt")
+        val instructions = DataReader.readFileOfStrings("src/main/resources/day2_drive.txt")
 
         var depth = 0
         var horizontalPos = 0
@@ -25,7 +25,7 @@ object Day2_Drive {
     }
 
     fun part2() {
-        val instructions = DataReader.readFileOfStrings("src/main/resources/day1_drive.txt")
+        val instructions = DataReader.readFileOfStrings("src/main/resources/day2_drive.txt")
 
         var depth = 0
         var horizontalPos = 0
