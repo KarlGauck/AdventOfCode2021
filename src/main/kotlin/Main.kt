@@ -3,6 +3,6 @@ import Utils.NumericUtils
 
 fun main(args: Array<String>) {
 
-    Day5_Hydrothermal_Venture.part2()
+    Day6_Lanternfish.part2()
 
 }
