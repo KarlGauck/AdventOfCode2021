@@ -3,6 +3,6 @@ import Utils.NumericUtils
 
 fun main(args: Array<String>) {
 
-    Day6_Lanternfish.part2()
+    Day7_Treachery_Of_Whales.part2()
 
 }
