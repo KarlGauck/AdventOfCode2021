@@ -85,26 +85,46 @@ object Day9_Smoke_Basin {
             }
         }
 
-        var controlledPoint = Array<Array<Boolean>>(heightMap.size) {Array(heightMap[0].size){false} }
+        var controlledPoints = Array<Array<Boolean>>(heightMap.size) {Array(heightMap[0].size){false} }
+        val areas = mutableListOf<Int>()
+        val areaLocations = mutableListOf<Array<Int>>()
 
-        //for() through all low points and store areas in array
-        val areaSizes = mutableListOf<Int>()
         for(point in lowPointLocs) {
-            val areaSize = lookupNeighbours(heightMap, controlledPoint, point[0], point[1])
+            val areaSize = lookupNeighbours(heightMap, controlledPoints, point[0], point[1], 0)
+            areas.add(areaSize)
+            areaLocations.add(point)
         }
 
-        println("sumOfLowPoints: $sumOfLowPoints")
+        for(yW in controlledPoints.withIndex()) {
+            val y = yW.value
+            for(xW in y.withIndex()) {
+                val x = xW.value
+                var c = "W"
+                if(x) c = "."
+                if(heightMap[yW.index][xW.index] == 9) c = "#"
+                print(" $c")
+            }
+            println()
+        }
+
+        var sorted = areas.sortedDescending()
+        println(sorted)
+        println("result: ${sorted[0] * sorted[1] * sorted[2]}")
+        println("1: ${sorted[0]}")
+        println("2: ${sorted[1]}")
+        println("3: ${sorted[2]}")
+
     }
 
-    fun lookupNeighbours(heightMap: Array<Array<Int>>, controlledPoints:Array<Array<Boolean>>, y: Int, x: Int): Int {
+    fun lookupNeighbours(heightMap: Array<Array<Int>>, controlledPoints:Array<Array<Boolean>>, y: Int, x: Int, index: Int): Int {
 
-        println("x: $x   y: $y")
-        var sum = 1
         if(controlledPoints[y][x])
             return 0
         if(heightMap[y][x] == 9)
             return 0
 
+
+        var sum = 1
         controlledPoints[y][x] = true
         for(dx in -1..1)
             for(dy in -1..1) {
@@ -112,8 +132,10 @@ object Day9_Smoke_Basin {
                     continue
                 if(dx == 0 && dy == 0)
                     continue
+                if(dx != 0 && dy != 0)
+                    continue
 
-                sum += lookupNeighbours(heightMap, controlledPoints, x + dx, y + dy)
+                sum += lookupNeighbours(heightMap, controlledPoints, y + dy, x + dx, index+1)
             }
         return sum
     }
