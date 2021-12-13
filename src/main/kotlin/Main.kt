@@ -1,9 +1,6 @@
-import Challanges.Day10_Syntax_Scoring
-import Challanges.Day11_Dumbo_Octopus
-import Challanges.Day12_Passage_Pathing
-import Challanges.Day9_Smoke_Basin
+import Challanges.*
 
-val it = Day12_Passage_Pathing
+val it = Day13_Transparent_Origami
 
 fun main(args: Array<String>) {
     println("- - - - - Part 1 - - - - -")
