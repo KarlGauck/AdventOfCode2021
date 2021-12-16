@@ -53,63 +53,46 @@ object Day14_Extended_Polymerisation {
             rules[parts[0]] = parts[1]
         }
 
+        var comboMap = mutableMapOf<String, Long>()
         val mapOfChars = mutableMapOf<Char, Long>()
-        val iterations = 10
-        val resultMemory = mutableMapOf<Int, MutableMap<String, MutableMap<Char, Long>>>()
-        fun checkRule(first: Char, second: Char, index: Int): MutableMap<Char, Long> {
-            if (index >= iterations)
-                return mutableMapOf()
 
-            var entryResultMap: MutableMap<Char, Long>? = null
-            if(resultMemory[index] != null && resultMemory[index]?.get("$first$second") != null)
-                entryResultMap = resultMemory[index]?.get("$first$second") ?: mutableMapOf()
-
-            if(entryResultMap != null) {
-//                println("aha: ${mapOfChars.size}")
-                for(entry in entryResultMap) {
-//                    println("entry")
-                    mapOfChars[entry.key] = mapOfChars[entry.key]?.plus(entry.value) ?: 0
-                }
-//                println("kk: ${mapOfChars.size}")
-                return entryResultMap
-            }
-
-            val ruleResult = rules["$first$second"]?.get(0) ?: return mutableMapOf()
-
-            entryResultMap = checkRule(first, ruleResult, index+1)
-            for(entry in checkRule(ruleResult, second, index+1)) {
-                entryResultMap[entry.key] = entryResultMap[entry.key]?.plus(entry.value) ?: entry.value
-            }
-            entryResultMap[ruleResult] = entryResultMap[ruleResult]?.plus(1) ?: 1
-
-            if(resultMemory[index] == null)
-                resultMemory[index] = mutableMapOf()
-            resultMemory[index]!!["$first$second"] = entryResultMap
-
-            mapOfChars[ruleResult] = mapOfChars[ruleResult]?.plus(1) ?: 1
-            return entryResultMap
-        }
-
-        val oldSequence = sequence.toString()
-        val sequenceArray = sequence.toCharArray().toMutableList()
-        for (i in oldSequence.indices.reversed()) {
-            mapOfChars[oldSequence[i]] = mapOfChars[oldSequence[i]]?.plus(1) ?: 1
-            if (i == 0)
+        for(charI in sequence.indices) {    // Iteriere durch alle Characters des input-strings
+            mapOfChars[sequence[charI]] = mapOfChars[sequence[charI]]?.plus(1) ?: 1     // Addiere den momentanen Character zur Liste der Anzahlen der verschiedenen Character
+            if(charI == 0)
                 continue
-            val first = oldSequence[i - 1]
-            val second = oldSequence[i]
-            checkRule(first, second, 0)
+            val first = sequence[charI-1]
+            val second = sequence[charI]
+            val result = rules["$first$second"]?.get(0)
+            result.let {             // Füge die beiden
+                comboMap["$first$second"] = comboMap["$first$second"]?.plus(1) ?: 1
+            }
         }
-        sequence = ""
-        for (c in sequenceArray)
-            sequence += "$c"
+
+        for (step in 1..40) {
+            val newComboMap = comboMap.toMutableMap()
+            for (comboE in comboMap.entries) {
+                val combo = comboE.key              // Char-Kombination, an der im Moment gerechnet wird
+                val duplicates = comboE.value       // Anzahl an bigrammen, für die die Operation ausgeführt werden muss
+                val first = combo[0]
+                val second = combo[1]
+                val result = rules["$first$second"] // Der neue Character, der zwischen den Beiden ursprünglichen Charactern eingefügt werden soll
+                result.let {    //if(result!=null) result -> it
+                    val newCombo1 = "$first$it"
+                    val newCombo2 = "$it$second"
+                    newComboMap[combo] = newComboMap[combo]?.minus(duplicates) ?: 0                     // Entferne die momentane Char-Komtination aus der Liste
+                    newComboMap[newCombo1] = newComboMap[newCombo1]?.plus(duplicates) ?: duplicates     // Füge die erste neu entstandene Char-Kombination hinzu
+                    newComboMap[newCombo2] = newComboMap[newCombo2]?.plus(duplicates) ?: duplicates     // Füge die zweite neu entstandene Char-Kombination hinzu
+                    mapOfChars[it!![0]] = mapOfChars[it[0]]?.plus(duplicates) ?: duplicates             // Erhöhe die Anzahl des neu entstandenen Characters
+                }
+            }
+            comboMap = newComboMap
+        }
 
         val max = mapOfChars.maxOf { it.value }
         val min = mapOfChars.minOf { it.value }
-        val minK = mapOfChars.keys.toMutableList()[mapOfChars.values.indexOf(min)]
 
         println("Result: ${max - min}")
-        println("max: $max   min: $min")
+        println("max: $max  min: $min")
     }
 
 }
